@@ -12,24 +12,31 @@ public class enemys : MonoBehaviour
     public float speed;
     public Vector3 cubeloc;
 
+    private Vector3 grassterainP;
+    private Vector3 grassterainS;
+    private Vector3 mudterainP;
+    private Vector3 mudterainS;
 
     void Start()
     {
-        speed = 4;
         {
             Waypoints = GameObject.Find("Waypoints" + path).transform;
             for (int i = 0; i < Waypoints.childCount; i++)
             {
                 cords.Add(Waypoints.GetChild(i).transform);
             }
+
+            grassterainP = GameObject.Find("TerainGrass").transform.position;
+            grassterainS = GameObject.Find("TerainGrass").transform.localScale;
+            mudterainP = GameObject.Find("TerainMud").transform.position;
+            mudterainS = GameObject.Find("TerainMud").transform.localScale;
+
+
         }
     }
 
     void Update()
     {
-
-
-
         if (transform.position != cords[at].position)
         {
             
@@ -45,9 +52,17 @@ public class enemys : MonoBehaviour
         }
 
 
-
-
-
-
+        if (transform.position.x >= grassterainP.x - grassterainS.x / 2  & transform.position.x <= grassterainP.x + grassterainS.x / 2 & transform.position.y >= grassterainP.y - grassterainS.y / 2 & transform.position.y <= grassterainP.y + grassterainS.y / 2)
+        {
+            speed = 12;
+        }
+        else if (transform.position.x >= mudterainP.x - mudterainS.x / 2 & transform.position.x <= mudterainP.x + mudterainS.x / 2 & transform.position.y >= mudterainP.y - mudterainS.y / 2 & transform.position.y <= mudterainP.y + mudterainS.y / 2)
+        {
+            speed = 3f;
+        }
+        else
+        {
+            speed = 6;
+        }
     }
 }
