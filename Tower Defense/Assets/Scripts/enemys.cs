@@ -8,39 +8,77 @@ public class enemys : MonoBehaviour
     public Transform Waypoints;
     private int at = 0;
     public int path;
+    private Vector3 randomcord;
 
     public float speed;
+    public float health;
     public Vector3 cubeloc;
 
-    private Vector3 grassterainP;
-    private Vector3 grassterainS;
-    private Vector3 mudterainP;
-    private Vector3 mudterainS;
+    private GameObject player;
+    private Score scorescript;
+    private GameObject panel;
+    private SpawnEnemy uiscript;
+    [SerializeField] GameObject healtbar;
 
+
+    private void Awake()
+    {
+        health = 15;
+    }
     void Start()
     {
         {
-            Waypoints = GameObject.Find("Waypoints" + path).transform;
-            for (int i = 0; i < Waypoints.childCount; i++)
-            {
-                cords.Add(Waypoints.GetChild(i).transform);
-            }
 
-            grassterainP = GameObject.Find("TerainGrass").transform.position;
-            grassterainS = GameObject.Find("TerainGrass").transform.localScale;
-            mudterainP = GameObject.Find("TerainMud").transform.position;
-            mudterainS = GameObject.Find("TerainMud").transform.localScale;
+            player = GameObject.Find("Player");
+            scorescript = player.GetComponent<Score>();
+            panel = GameObject.Find("Panel");
+            uiscript = panel.GetComponent<SpawnEnemy>();
+            speed = 6f;
+            findwaypoints();
 
+            randomcord = gameObject.transform.position - uiscript.startlocation.transform.position;
 
+            Quaternion hprot = Quaternion.identity;
+            hprot.eulerAngles = new Vector3(-90, 0, 0);
+            Instantiate(healtbar, transform.position, hprot, transform);
         }
     }
 
     void Update()
     {
-        if (transform.position != cords[at].position)
+        if (health <= 0)
         {
-            
-            transform.position = Vector3.MoveTowards(transform.position, cords[at].position, speed * Time.deltaTime);
+            scorescript.money += 2;
+            die();
+        }
+
+        if (scorescript.placementMode == false)
+        {
+            movetowaypoint();
+        }
+    }
+    private void die()
+    {
+        scorescript.deadenemies += 1;
+        Destroy(gameObject);
+    }
+
+    private void findwaypoints()
+    {
+        Waypoints = GameObject.Find("Waypoints" + path).transform;
+        for (int i = 0; i < Waypoints.childCount; i++)
+        {
+            cords.Add(Waypoints.GetChild(i).transform);
+        }
+    }
+
+    private void movetowaypoint()
+    {
+        
+        
+        if (transform.position != cords[at].position + randomcord)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, cords[at].position + randomcord, speed * Time.deltaTime);
         }
         else if (cords.Count > at + 1)
         {
@@ -48,21 +86,26 @@ public class enemys : MonoBehaviour
         }
         else
         {
-            Destroy(gameObject);
+            scorescript.lives -= 1;
+            die();
         }
+    }
 
-
-        if (transform.position.x >= grassterainP.x - grassterainS.x / 2  & transform.position.x <= grassterainP.x + grassterainS.x / 2 & transform.position.y >= grassterainP.y - grassterainS.y / 2 & transform.position.y <= grassterainP.y + grassterainS.y / 2)
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag.Equals("grass"))
         {
             speed = 12;
         }
-        else if (transform.position.x >= mudterainP.x - mudterainS.x / 2 & transform.position.x <= mudterainP.x + mudterainS.x / 2 & transform.position.y >= mudterainP.y - mudterainS.y / 2 & transform.position.y <= mudterainP.y + mudterainS.y / 2)
+        else if (other.gameObject.tag.Equals("mud"))
         {
-            speed = 3f;
+            speed = 3;
         }
-        else
-        {
-            speed = 6;
-        }
+    }
+
+    public void takeDamage(float dmg)
+    {
+        Debug.Log("damage = " + dmg);
+        health -= dmg;
     }
 }

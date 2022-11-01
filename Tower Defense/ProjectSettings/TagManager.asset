@@ -3,15 +3,23 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - mud
+  - grass
+  - enemy
+  - towerspot
+  - towerspotfilled
+  - pathspot
+  - path
+  - TowerUI
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - path
   - Water
   - UI
-  - 
+  - Terain
   - 
   - 
   - 
