@@ -70,7 +70,6 @@ public class SpawnEnemy : MonoBehaviour
             yield return new WaitForSeconds(Random.Range(0.2f, 1f));
         }
         currentwave += 1;
-        waveenemys += 1 * currentwave;
         
         if (wavesLeft > 0)
         {
@@ -83,6 +82,7 @@ public class SpawnEnemy : MonoBehaviour
         timeuntiwave = 20;
         yield return new WaitForSeconds(20f);
         scorescript.deadenemies = 0;
+        waveenemys += 1 * currentwave;
         StartCoroutine(Wave());
     }
 
