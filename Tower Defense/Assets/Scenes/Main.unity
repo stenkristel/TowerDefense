@@ -1504,7 +1504,7 @@ MonoBehaviour:
   startlocation: {fileID: 332080841}
   selectedtoweriamage: {fileID: 0}
   towerimage: {fileID: 2112713190}
-  waveenemys: 0
+  waveenemys: 15
   currentwave: 0
   wavesLeft: 10
   uiwave: {fileID: 888880487}

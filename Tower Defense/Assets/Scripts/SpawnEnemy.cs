@@ -28,7 +28,6 @@ public class SpawnEnemy : MonoBehaviour
     {
         player = GameObject.Find("Player");
         scorescript = player.GetComponent<Score>();
-        waveenemys = 15;
         timeuntiwave = 0;
         currentwave += 1;
         uiwave.GetComponent<TextMeshProUGUI>().text = "Wave: " + currentwave;
