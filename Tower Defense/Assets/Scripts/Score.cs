@@ -86,10 +86,13 @@ public class Score : MonoBehaviour
         {
             Pathloc.y = newpos;
         }
-
-        Collider[] colliders = Physics.OverlapBox(Pathloc, pathspotprefab.transform.localScale / 2, pathspotprefab.transform.rotation);
+    
+        // Checks to so if something is in the way for a new path to be placed
+        Collider[] colliders = Physics.OverlapBox(Pathloc, 
+            pathspotprefab.transform.localScale / 2, pathspotprefab.transform.rotation);
         if (colliders.Length == 0)
         {
+            //Makes a new box for a new path to be placed (The green plus box)
             Instantiate(pathspotprefab, Pathloc, pathspotprefab.transform.rotation);
         }
     }
@@ -138,17 +141,21 @@ public class Score : MonoBehaviour
                 Debug.Log("not enough money!");
             }
 
-            else if (hit.collider.tag == "pathspot" & totalpaths > 0)
+            else if (hit.collider.CompareTag("pathspot") & totalpaths > 0)
             {
                 totalpaths -= 1;
                 placedpaths += 1;
-                waypoint = Instantiate(waypointprefab, hit.collider.transform.position, hit.collider.transform.rotation);
+                var pathTransform = hit.collider.transform;
+                //Places a new enemy path
+                waypoint = Instantiate(waypointprefab, pathTransform.position, pathTransform.rotation);
                 waypoint.transform.SetParent(waypoints.transform);
                 Destroy(hit.collider.gameObject);
-                Placepathspot(hit.collider.transform.position, hit.collider.transform.position, hit.collider.transform.position.x, true, true);
-                Placepathspot(hit.collider.transform.position, hit.collider.transform.position, hit.collider.transform.position.x, false, true);
-                Placepathspot(hit.collider.transform.position, hit.collider.transform.position, hit.collider.transform.position.y, true, false);
-                Placepathspot(hit.collider.transform.position, hit.collider.transform.position, hit.collider.transform.position.y, false, false);
+                var pathPosition = pathTransform.position;
+                //Places a NewPath box (the green plus box)
+                Placepathspot(pathPosition, pathPosition, pathPosition.x, true, true);
+                Placepathspot(pathPosition, pathPosition, pathPosition.x, false, true);
+                Placepathspot(pathPosition, pathPosition, pathPosition.y, true, false);
+                Placepathspot(pathPosition, pathPosition, pathPosition.y, false, false);
             }
 
             else
